@@ -16,8 +16,8 @@ setup(
     author='Boris Raicheff',
     author_email='b@raicheff.com',
     url='https://github.com/raicheff/flask-intercom',
-    install_requires=['flask', 'six'],
-    packages=['flask_intercom'],
+    install_requires=('flask', 'six'),
+    packages=('flask_intercom',),
 )
 
 
