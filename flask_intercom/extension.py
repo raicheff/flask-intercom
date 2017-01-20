@@ -14,6 +14,7 @@ import itsdangerous
 import requests
 
 from flask import Response, abort, request
+from requests_oauthlib import OAuth2
 from six.moves.http_client import BAD_REQUEST, OK
 
 from .signals import namespace
@@ -42,9 +43,13 @@ class Intercom(object):
     :param app: Flask app to initialize with. Defaults to `None`
     """
 
-    secret_key = None
+    app_id = None
+
+    access_token = None
 
     hub_secret = None
+
+    secret_key = None
 
     def __init__(self, app=None, blueprint=None):
 
@@ -57,8 +62,17 @@ class Intercom(object):
 
     def init_app(self, app, blueprint=None):
 
-        self.secret_key = app.config.get('INTERCOM_SECRET_KEY')
+        self.app_id = app.config.get('INTERCOM_APP_ID')
+
+        self.access_token = access_token = app.config.get('INTERCOM_ACCESS_TOKEN')
+        if access_token is None:
+            logger.warning('INTERCOM_ACCESS_TOKEN not set')
+            return
+
+        self.session.auth = OAuth2(token={'access_token': access_token})
+
         self.hub_secret = app.config.get('INTERCOM_HUB_SECRET')
+        self.secret_key = app.config.get('INTERCOM_SECRET_KEY')
 
         app.add_template_filter(self._user_hash, 'intercom_user_hash')
 
