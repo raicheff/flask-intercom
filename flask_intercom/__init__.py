@@ -9,7 +9,4 @@
 from .extension import Intercom
 
 
-__version__ = '0.1.0'
-
-
 # EOF
