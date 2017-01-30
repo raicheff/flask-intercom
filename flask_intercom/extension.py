@@ -77,7 +77,7 @@ class Intercom(object):
         app.add_template_filter(self._user_hash, 'intercom_user_hash')
 
         if blueprint is not None:
-            blueprint.add_url_rule('/intercom', 'intercom', self.handle_webhook, methods=['POST'])
+            blueprint.add_url_rule('/intercom', 'intercom', self.handle_webhook, methods=('POST',))
 
     def create_user(self, **user):
         """
