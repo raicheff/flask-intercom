@@ -10,7 +10,6 @@ import hashlib
 import hmac
 import logging
 
-import itsdangerous
 import requests
 
 from flask import Response, abort, request
@@ -134,7 +133,7 @@ class Intercom(object):
             abort(BAD_REQUEST)
 
         digest = hmac.new(self.hub_secret.encode(), request.data, hashlib.sha1).hexdigest()
-        if not itsdangerous.constant_time_compare(digest, signature):
+        if not hmac.compare_digest(digest, signature):
             abort(BAD_REQUEST)
 
         event = request.get_json()
