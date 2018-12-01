@@ -61,6 +61,8 @@ class Intercom(object):
 
     def init_app(self, app, blueprint=None):
 
+        app.add_template_filter(self._user_hash, 'intercom_user_hash')
+
         self.app_id = app.config.get('INTERCOM_APP_ID')
 
         self.access_token = access_token = app.config.get('INTERCOM_ACCESS_TOKEN')
@@ -72,8 +74,6 @@ class Intercom(object):
 
         self.hub_secret = app.config.get('INTERCOM_HUB_SECRET')
         self.secret_key = app.config.get('INTERCOM_SECRET_KEY')
-
-        app.add_template_filter(self._user_hash, 'intercom_user_hash')
 
         if blueprint is not None:
             blueprint.add_url_rule('/intercom', 'intercom', self.handle_webhook, methods=('POST',))
